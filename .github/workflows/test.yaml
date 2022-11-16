@@ -1,0 +1,27 @@
+name: 'e2e tests'
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: choice
+        required: true
+        description: Environment
+        options:
+          - integration 
+          - stage
+          - prod
+
+jobs:
+  foo:
+    name: run on ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    env:
+      TEST_integration: 'integration'
+      TEST_stage: 'stage'
+      TEST_prod: 'prod'
+    steps:
+      - run: echo $TEST_${{ inputs.environment }}
+      - run: echo FOO=$TEST_${{ inputs.environment }} >> $GITHUB_ENV
+      - run: echo ${{ env['FOO'] }}
+      - run: echo ${{ env.FOO }}
